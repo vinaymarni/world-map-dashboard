@@ -1,8 +1,9 @@
 import { world_map } from './world-map';
 //import { uncountries } from './data';
 import * as React from "react";
-import { MapsComponent, LayersDirective, LayerDirective, Inject, Legend, MapsTooltip, Zoom, Selection, MarkersDirective, MarkerDirective, Marker  } from '@syncfusion/ej2-react-maps';
-import Content from './Content';
+//import Content from './Content';
+import { MapsComponent, LayersDirective, LayerDirective, Inject, Legend, MapsTooltip, Zoom, Selection, MarkersDirective, MarkerDirective, Marker, Highlight  } from '@syncfusion/ej2-react-maps';
+
 import './App.css'
 
 const SAMPLE_CSS = `
@@ -54,8 +55,10 @@ const SAMPLE_CSS = `
   }
     `; 
   let marketTemp: string = '<div id="template"> <div class="pulse-container"><div class="pulse-box"><div class="pulse-css"></div></div></div></div>'
-
+  
 class App extends React.Component {
+
+    
     render() {
         
         return (
@@ -65,16 +68,21 @@ class App extends React.Component {
             </style>
             <div className='top-bar'>
               <h1 className='heading'>World Map</h1>
-              <div>
-                <input list="inputs-drop-down" type="search" className="search" placeholder="Region"/>
-                <datalist className="drop-list"  id="inputs-drop-down">
-                  <option value="America" >America</option>
-                  <option value="India">India</option>
-                  <option value="Australia">Australia</option>
-                  <option value="Russia">Russia</option>
-                </datalist>
+              <div className='dropdown-setting-container'>
+                <div>
+                  <input list="inputs-drop-down" type="search" className="search" placeholder="Region"/>
+                  <datalist className="drop-list"  id="inputs-drop-down">
+                    <option value="America" >America</option>
+                    <option value="India">India</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Russia">Russia</option>
+                  </datalist>
+                </div>
+                <img style={{height: "22px", width: "22px", marginLeft: "30px", borderRadius:"10px"}} alt=''src='https://res.cloudinary.com/di01osmzz/image/upload/v1645686634/gear_wheel_mrf2bx.png' />
               </div>
+
             </div>
+           
             <MapsComponent id="maps" className='maps' legendSettings={{ visible: true }} theme="Material" zoomSettings={{
               enable: true,
               color: 'green',
@@ -84,8 +92,10 @@ class App extends React.Component {
               mouseWheelZoom: false,
               toolbars: ['ZoomIn', 'ZoomOut', 'Pan', 'Reset']}} 
             > 
+            
               <Inject services={[Legend, MapsTooltip, Zoom, Selection, Marker]}/>
               <LayersDirective>
+              
                   <LayerDirective 
                     shapeData={world_map} 
                     shapeDataPath='Country' 
@@ -101,10 +111,7 @@ class App extends React.Component {
                       enable: true,
                       fill: 'gray',
                       border: { color: 'black', width: 1 }
-                  }}
-                  
-                  >
-                    <h1 style={{color: 'red'}}>World Map</h1>
+                  }}>
                     <MarkersDirective> 
                       <MarkerDirective 
                         visible={true} 
@@ -112,16 +119,26 @@ class App extends React.Component {
                         template = {marketTemp}
                         tooltipSettings={{
                           visible: true,
-                          valuePath: 'city'
+                          valuePath: 'city',
+                          format: 'Unit-1, Stanley Green <br> Toledo, Aland Islands',
                         }} 
                         dataSource={[
-                          { latitude: 20.95121990866204, longitude: 73.468749999999998, city: <Content />  },
-                          { latitude: 50.88893689676585, longitude: -80.3359375, city: 'Canada' },
-                          { latitude: -14.64607562172573, longitude: 35.54687499999999, city: 'Malawi' }
+                          { latitude: 20.95121990866204, longitude: 73.468749999999998 },
+                          { latitude: 50.88893689676585, longitude: -80.3359375 },
+                          { latitude: -14.64607562172573, longitude: 35.54687499999999 }
                         ]}
                         >
                       </MarkerDirective>
-                    </MarkersDirective>
+
+                      <MarkerDirective 
+                        visible={true} 
+                        
+                        template = '<div> Healthy <br> Need attention <br> Critical </div>'
+                        dataSource={[{ latitude: 50.95121990866204, longitude: 250.468749999999998 },]}
+                        >
+                      </MarkerDirective>
+ 
+                    </MarkersDirective> 
                   </LayerDirective>
               </LayersDirective>
             </MapsComponent>
